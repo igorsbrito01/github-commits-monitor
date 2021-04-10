@@ -1,24 +1,44 @@
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Commit
+from .models import Commit, Repository
+from .github import repository_exits
 from .serializers import CommitSerializer, RepositorySerializer
 
+class CommitsList(generics.ListAPIView):
+    queryset = Commit.objects.all()
+    serializer_class = CommitSerializer
+    permission_classes = [IsAuthenticated]
 
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def commit_list_view(request):
-    commits = Commit.objects.all()
-    serializer = CommitSerializer(commits, many=True)
-    return Response(serializer.data)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(repository__in=self.request.user.repositories.all())
 
+class RepositoryAPIView(generics.ListCreateAPIView):
+    queryset = Repository.objects.all()
+    serializer_class = RepositorySerializer
+    permission_classes = [IsAuthenticated]
 
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def repository_create_view(request):
-    serializer = RepositorySerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get(self, request, *args, **kwargs):
+        repos = self.queryset.filter(owner=request.user)
+        serializer = self.serializer_class(repos, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        if repository_exits(request.user.username, request.data['name']):
+            repository, created = Repository.objects.get_or_create(owner=request.user, name=request.data['name'])
+            serializer = self.serializer_class(repository)
+
+            if created:
+                repository.populate_commits()
+                r_status = status.HTTP_201_CREATED 
+            else:
+                r_status = status.HTTP_200_OK
+            
+
+            return Response(serializer.data, status=r_status)
+      
+        return Response(status=status.HTTP_400_BAD_REQUEST)
