@@ -1,16 +1,20 @@
+from django_filters import rest_framework as rest_filters
 from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Commit, Repository
+from .filters import ComitsFilter
 from .github import repository_exits
+from .models import Commit, Repository
 from .serializers import CommitSerializer, RepositorySerializer
 
 class CommitsList(generics.ListAPIView):
     queryset = Commit.objects.all()
     serializer_class = CommitSerializer
     permission_classes = [IsAuthenticated]
+    filterset_class = ComitsFilter
+    filter_backends = [rest_filters.DjangoFilterBackend]
 
     def get_queryset(self):
         queryset = super().get_queryset()
