@@ -74,15 +74,31 @@ body {
 }
 
 .sidebar-nav li a {
-  display: block;
-  text-decoration: none;
-  color: #999999;
+  display: block !important;
+  text-decoration: none !important;
+  color: #999999 !important;
+}
+
+.sidebar-nav li.body-title {
+  color:#fff;
+}
+
+.sidebar-nav li.nav-item {
+  margin-left: 10px;
+}
+
+.sidebar-nav hr.divisor {
+  border-color: #999999;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: -2px;
+  margin-bottom: 5px;
 }
 
 .sidebar-nav li a:hover {
-  text-decoration: none;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.2);
+  text-decoration: none !important;
+  color: #fff !important;
+  cursor: pointer;
 }
 
 .sidebar-nav li a:active, .sidebar-nav li a:focus {

@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom';
 import CommitListContainer from './containers/CommitListContainer';
 import RepoCreateContainer from './containers/RepoCreateContainer';
+import RepoListContainer from './containers/RepoListContainer';
 
 export default (
     <Router>
@@ -16,6 +17,7 @@ export default (
                             Github Monitor
                         </Link>
                     </li>
+                    <RepoListContainer/>
                 </ul>
             </div>
 
