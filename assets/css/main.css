@@ -58,6 +58,9 @@ body {
   margin-right: -250px;
 }
 
+.card.filter-card {
+  margin-top: 15px;
+}
 
 .sidebar-nav {
   position: absolute;

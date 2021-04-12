@@ -11,7 +11,7 @@ class RepoListContainer extends React.Component {
   }
 
   selectRepo(repoName) {
-    commitAPI.getCommitsFiltered(repoName, '');
+    commitAPI.getCommits(repoName, '');
   }
 
   render() {
