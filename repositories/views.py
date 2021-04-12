@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from .filters import ComitsFilter
 from .github import repository_exits
 from .models import Commit, Repository
+from .pagination import StandardResultsSetPagination
 from .serializers import CommitSerializer, RepositorySerializer
 
 class CommitsList(generics.ListAPIView):
@@ -15,6 +16,7 @@ class CommitsList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     filterset_class = ComitsFilter
     filter_backends = [rest_filters.DjangoFilterBackend]
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()

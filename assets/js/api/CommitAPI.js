@@ -10,6 +10,11 @@ export const getCommits = (repoName, author) => axios.get(`/api/commits/?repo=`+
     store.dispatch(getCommitsSuccess({...response.data}));
   });
 
+export const getCommitsByUrl = (url) => axios.get(url)
+  .then((response) => {
+    store.dispatch(getCommitsSuccess({...response.data}));
+  });
+
 export const getRepositories = () => axios.get('/api/repositories/')
  .then((response) => {
   store.dispatch(getRepos({...response.data}));

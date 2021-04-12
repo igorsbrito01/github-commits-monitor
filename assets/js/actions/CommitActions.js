@@ -8,6 +8,9 @@ export const createRepositorySuccess = (response, successMessage) => ({
 export const getCommitsSuccess = (data) => ({
   type: types.GET_COMMITS_SUCCESS,
   payload: data.results,
+  count: data.count,
+  next: data.next,
+  previous: data.previous, 
 });
 
 export const getRepos = data => ({

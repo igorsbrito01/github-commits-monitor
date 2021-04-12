@@ -2,6 +2,10 @@ import * as types from '../actions/ActionTypes';
 
 const initialState = {
   commits: [],
+  pageSize: 10,
+  commitsCount: 0,
+  commitsNextUrl: '',
+  commitsPreviousUrl:'',
   repos: [],
   successMessage: false,
 };
@@ -12,6 +16,9 @@ const commitReducer = (state = initialState, action) => {
       return {
         ...state,
         commits: Object.values(action.payload),
+        commitsCount: action.count,
+        commitsNextUrl: action.next,
+        commitsPreviousUrl: action.previous,
       };
     case types.CREATE_REPOSITORY_SUCCESS:
       return {...state, successMessage: action.payload.successMessage};
