@@ -9,7 +9,8 @@ const CommitList = (props) => {
     commitsPreviousUrl, 
     commitsNextUrl,
     paginationNext,
-    paginationPrevious 
+    paginationPrevious,
+    filterCommitsBy 
   } = props;
   return (
     <div>
@@ -21,9 +22,12 @@ const CommitList = (props) => {
                 <li className={commitsPreviousUrl ? "page-item" : "page-item disabled"}>
                   <a className="page-link" href="#" onClick={paginationPrevious}>Previous</a>
                 </li>
-                <li className="page-item disabled"><a className="page-link" href="#">Current</a></li>
+                <li className="page-item disabled"><a className="page-link" href="#">Current Page</a></li>
                 <li className={commitsNextUrl ? "page-item" : "page-item disabled"}>
                   <a className="page-link" href="#" onClick={paginationNext}>Next</a>
+                </li>
+                <li className="pagination-number">
+                  {commits.length} of {commitsCount}
                 </li>
               </ul>
             </div>
@@ -44,13 +48,13 @@ const CommitList = (props) => {
                       {commit.message}
                     </p>
                     <small className="text-muted">
-                      {commit.author}
+                      <a href="#author" onClick={filterCommitsBy}>{commit.author}</a>
                       {' '}
                       authored
                       {' '}
                       on
                       {' '}
-                      {commit.repository}
+                      <a href="#repository" onClick={filterCommitsBy}>{commit.repository}</a>
                       {' '}
                       at
                       {' '}
@@ -70,6 +74,7 @@ const CommitList = (props) => {
 
 CommitList.propTypes = {
   commits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  filterCommitrBy: PropTypes.func,
   pageSize: PropTypes.number,
   commitsCount: PropTypes.number,
   commitsNextUrl: PropTypes.string,

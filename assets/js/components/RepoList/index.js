@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const RepoList = (props) => {
-  const {repos, selectRepo} = props;
+  const {repos, selectRepo, author} = props;
   return(
     <div>
       {repos!= null && repos.length != 0 && (
@@ -12,7 +12,7 @@ const RepoList = (props) => {
           </li>
           <hr className="divisor"/>
           { repos.map((repo, index) => (
-            <li className="nav-item" key={index} onClick={() => selectRepo(repo.name)}>
+            <li className="nav-item" key={index} onClick={() => selectRepo(repo.name, author)}>
                 <a>{repo.name}</a>
             </li>
           ))}
@@ -25,6 +25,7 @@ const RepoList = (props) => {
 RepoList.propTypes = {
    selectRepo: PropTypes.func,
    repos: PropTypes.arrayOf(PropTypes.object),
+   author: PropTypes.string,
 };
 
 export default RepoList;

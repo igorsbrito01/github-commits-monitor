@@ -66,6 +66,30 @@ div.pagination-container {
   margin-top: 15px;
 }
 
+.pagination-number {
+  padding-top: 7px;
+  padding-left: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.filter-component {
+  margin-top: 15px;
+}
+
+.filter-info {
+  padding: 0px;
+}
+
+.filter-header {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.filter-item {
+  padding-top: 5px;
+}
+
 .sidebar-nav {
   position: absolute;
   top: 0;

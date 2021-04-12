@@ -13,6 +13,16 @@ export const getCommitsSuccess = (data) => ({
   previous: data.previous, 
 });
 
+export const getCommitsSuccessSavingParams = ( repoName, author, data) => ({
+  type: types.GET_COMMITS_SUCCESS_SAVINIG_PARAMS,
+  payload: data.results,
+  count: data.count,
+  next: data.next,
+  previous: data.previous,
+  repoName: repoName,
+  author: author, 
+});
+
 export const getRepos = data => ({
   type: types.GET_REPOS_SUCCESS,
   payload: data

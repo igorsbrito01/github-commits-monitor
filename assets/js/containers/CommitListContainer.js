@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import * as commitAPI from '../api/CommitAPI';
 import CommitList from '../components/CommitList';
-import FilterCommitForm from '../components/FilterCommitsForm';
 
 class CommitListContainer extends React.Component {
   componentDidMount() {
@@ -34,11 +33,50 @@ class CommitListContainer extends React.Component {
     event.preventDefault();
   }
 
+  filterCommitsBy = (event) => {
+    const {repoNameFilter, authorFilter} =  this.props;
+    var filterField  = event.target.href.split('#')[1];
+
+    if(filterField == 'author'){
+      commitAPI.getCommitsSaveFilters(repoNameFilter, event.target.text);
+    }else if(filterField == 'repository'){
+      commitAPI.getCommitsSaveFilters(event.target.text, authorFilter);
+    }
+    event.preventDefault();
+  }
+
+  cleanFilter = (event) => {
+    commitAPI.getCommitsSaveFilters('', '');
+    event.preventDefault();
+  }
+
   render() {
-    const {commits, repos, pageSize, commitsCount, commitsPreviousUrl, commitsNextUrl} = this.props;
+    const {commits, repos, pageSize, commitsCount, commitsPreviousUrl, commitsNextUrl, repoNameFilter, authorFilter} = this.props;
     return (
       <div>
-        <FilterCommitForm onSubmit={this.submit} repos={repos} />
+        {repoNameFilter == '' && authorFilter == '' ? (
+          <div></div>
+        ): (
+          <div className="card filter-component">
+            <div className="card-header row filter-header">
+              <div className="filter-info row col-10">
+                {repoNameFilter != '' && (
+                  <div className="col-6 filter-item"> 
+                    <span className="align-middle"> <strong>Repository: </strong> {repoNameFilter}</span>
+                  </div>
+                )}
+                {authorFilter != '' && (
+                  <div className="col-6 filter-item">
+                    <span className="align-middle"> <strong>Author: </strong> {authorFilter}</span>
+                  </div>
+                )}
+              </div>
+              <div className="col-2">
+                <button type="button" class="btn btn-danger" onClick={this.cleanFilter}>Remove Filters</button>
+              </div>
+            </div>
+          </div>
+        )}
         <div>
         </div>
         <CommitList 
@@ -49,6 +87,7 @@ class CommitListContainer extends React.Component {
           commitsNextUrl={commitsNextUrl}
           paginationNext={this.paginationNext}
           paginationPrevious={this.paginationPrevious}
+          filterCommitsBy={this.filterCommitsBy}
         />
       </div>
     );
@@ -62,6 +101,8 @@ CommitListContainer.propTypes = {
   commitsCount: PropTypes.number,
   commitsNextUrl: PropTypes.string,
   commitsPreviousUrl: PropTypes.string,
+  repoNameFilter: PropTypes.string,
+  authorFilter: PropTypes.string,
 };
 
 const mapStateToProps = store => ({
@@ -71,6 +112,8 @@ const mapStateToProps = store => ({
   commitsCount: store.commitState.commitsCount,
   commitsNextUrl: store.commitState.commitsNextUrl,
   commitsPreviousUrl: store.commitState.commitsPreviousUrl,
+  repoNameFilter: store.commitState.repoNameFilter,
+  authorFilter: store.commitState.authorFilter,
 });
 
 export default connect(mapStateToProps)(CommitListContainer);

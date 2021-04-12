@@ -10,15 +10,15 @@ class RepoListContainer extends React.Component {
     commitAPI.getRepositories();
   }
 
-  selectRepo(repoName) {
-    commitAPI.getCommits(repoName, '');
+  selectRepo(repoName, author) {
+    commitAPI.getCommitsSaveFilters(repoName, author);
   }
 
   render() {
-    const {repos} = this.props;;
+    const {repos, author} = this.props;
     return(
       <div>
-        <RepoList repos={repos} selectRepo={this.selectRepo}/>
+        <RepoList repos={repos} author={author} selectRepo={this.selectRepo}/>
       </div>
     );
   }
@@ -27,10 +27,12 @@ class RepoListContainer extends React.Component {
 
 RepoListContainer.propTypes = {
   repos: PropTypes.arrayOf(PropTypes.object),
+  author: PropTypes.string,
 };
   
 const mapStateToProps = store => ({
   repos: store.commitState.repos,
+  author: store.commitState.authorFilter,
 });
 
 export default connect(mapStateToProps)(RepoListContainer);
