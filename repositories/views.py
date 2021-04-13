@@ -29,11 +29,9 @@ class RepositoryAPIView(generics.ListCreateAPIView):
     serializer_class = RepositorySerializer
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        repos = self.queryset.filter(owner=request.user)
-        serializer = self.serializer_class(repos, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(owner=self.request.user)
 
     def post(self, request, *args, **kwargs):
         if repository_exits(request.user.username, request.data['name']):
