@@ -43,8 +43,7 @@ class RepositoryAPIView(generics.ListCreateAPIView):
                 r_status = status.HTTP_201_CREATED 
             else:
                 r_status = status.HTTP_200_OK
-            
 
-            return Response(serializer.data, status=r_status)
+            return Response({'data': serializer.data, 'created': created}, status=r_status)
       
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({'notExists': True}, status=status.HTTP_400_BAD_REQUEST)

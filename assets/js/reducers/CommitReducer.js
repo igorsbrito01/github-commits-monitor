@@ -8,8 +8,11 @@ const initialState = {
   commitsPreviousUrl:'',
   repos: [],
   successMessage: false,
+  failMessage: false,
   repoNameFilter: '',
   authorFilter: '',
+  created: false,
+  notExists: false,
 };
 
 const commitReducer = (state = initialState, action) => {
@@ -35,7 +38,31 @@ const commitReducer = (state = initialState, action) => {
         authorFilter: action.author,
       }
     case types.CREATE_REPOSITORY_SUCCESS:
-      return {...state, successMessage: action.payload.successMessage};
+      return {
+        ...state, 
+        successMessage: action.payload.successMessage,
+        failMessage: false, 
+        created:action.payload.created
+      };
+    case types.CREATE_REPOSITORY_FAIL:
+      var notExists = false
+      if(action.payload.data.notExists != undefined){
+        notExists = action.payload.data.notExists
+      }
+      return{
+        ...state,
+        successMessage: false, 
+        failMessage: action.payload.failMessage,
+        notExists: notExists,
+      }
+    case types.CLEAN_MESSAGES:
+      return {
+        ...state,
+        successMessage: false,
+        failMessage: false,
+        notExists: false,
+        created:false
+      }
     case types.GET_REPOS_SUCCESS:
       return {
         ...state,
