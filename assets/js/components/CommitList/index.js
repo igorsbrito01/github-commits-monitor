@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment'
 
 const CommitList = (props) => {
   const {
@@ -12,6 +13,12 @@ const CommitList = (props) => {
     paginationPrevious,
     filterCommitsBy 
   } = props;
+
+  commits.map((commit, i) =>{
+    var datetime = new Date(commit.date);
+    commit.formatDate = moment(datetime).format('DD/MM/YYYY HH:mm:ss');
+  });
+
   return (
     <div>
       {commits.length !== 0 && (
@@ -42,7 +49,7 @@ const CommitList = (props) => {
                       {' '}
                       at
                       {' '}
-                      {commit.date}
+                      {commit.formatDate}
                     </small>
                     {index !== commits.length - 1 && <hr />}
                   </div>
