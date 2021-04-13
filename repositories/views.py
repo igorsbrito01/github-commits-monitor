@@ -9,6 +9,7 @@ from .github import repository_exits
 from .models import Commit, Repository
 from .pagination import StandardResultsSetPagination
 from .serializers import CommitSerializer, RepositorySerializer
+from .tasks import get_repository_commits
 
 class CommitsList(generics.ListAPIView):
     queryset = Commit.objects.all()
@@ -39,7 +40,7 @@ class RepositoryAPIView(generics.ListCreateAPIView):
             serializer = self.serializer_class(repository)
 
             if created:
-                repository.populate_commits()
+                get_repository_commits(repository.id)
                 r_status = status.HTTP_201_CREATED 
             else:
                 r_status = status.HTTP_200_OK
