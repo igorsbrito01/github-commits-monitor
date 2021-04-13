@@ -4,9 +4,11 @@ from .models import Commit, Repository
 
 
 class RepositorySerializer(serializers.ModelSerializer):
+    num_commit = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Repository
-        fields = ('name',)
+        fields = ('name','num_commit')
 
 
 class CommitSerializer(serializers.ModelSerializer):

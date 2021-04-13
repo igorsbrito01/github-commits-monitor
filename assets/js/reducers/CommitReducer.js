@@ -13,6 +13,7 @@ const initialState = {
   authorFilter: '',
   created: false,
   notExists: false,
+  repoCommitCount: [],
 };
 
 const commitReducer = (state = initialState, action) => {
@@ -67,6 +68,11 @@ const commitReducer = (state = initialState, action) => {
       return {
         ...state,
         repos: Object.values(action.payload)
+      }
+    case types.REPOSITORY_COMMIT_COUNT_SUCCESS:
+      return{
+        ...state,
+        repoCommitCount: Object.values(action.payload)
       }
     default:
       return state;

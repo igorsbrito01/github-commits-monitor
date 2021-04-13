@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django_filters import rest_framework as rest_filters
 from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
@@ -47,3 +48,14 @@ class RepositoryAPIView(generics.ListCreateAPIView):
             return Response({'data': serializer.data, 'created': created}, status=r_status)
       
         return Response({'notExists': True}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RepositoryCountList(generics.ListAPIView):
+    queryset = Repository.objects.all()
+    serializer_class = RepositorySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(owner=self.request.user).annotate(num_commit=Count('commit'))
+        

@@ -23,7 +23,7 @@ const CommitFilter = (props) => {
                 )}
               </div>
               <div className="col-2">
-                <button type="button" class="btn btn-danger" onClick={cleanFilter}>Remove Filters</button>
+                <button type="button" className="btn btn-danger" onClick={cleanFilter}>Remove Filters</button>
               </div>
             </div>
           </div>

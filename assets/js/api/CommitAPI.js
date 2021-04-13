@@ -7,7 +7,8 @@ import {
   getRepos, 
   getCommitsSuccessSavingParams,
   createRepositoryFail,
-  cleanMessages
+  cleanMessages,
+  repositoriesCommitCountSuccess
 } from '../actions/CommitActions';
 
 export const getCommits = (repoName, author) => axios.get(`/api/commits/?repo=`+ repoName +`&author=`+author)
@@ -49,3 +50,8 @@ export const createRepository = (values, headers, formDispatch) => axios.post('/
       store.dispatch(cleanMessages());
     }, 10000);
   });
+
+  export const getRepositoryCommitCount = () => axios.get('/api/repositories/count')
+    .then((reponse) =>{
+      store.dispatch(repositoriesCommitCountSuccess(reponse.data));
+    });

@@ -37,3 +37,8 @@ export const getRepos = data => ({
   type: types.GET_REPOS_SUCCESS,
   payload: data
 });
+
+export const repositoriesCommitCountSuccess = data =>({
+    type: types.REPOSITORY_COMMIT_COUNT_SUCCESS,
+    payload: data
+});
