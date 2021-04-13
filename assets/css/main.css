@@ -64,6 +64,11 @@ body {
 
 div.pagination-container {
   margin-top: 15px;
+  display: inline-flex;
+}
+
+.pagination-element {
+  margin-bottom: 0px;
 }
 
 .pagination-number {

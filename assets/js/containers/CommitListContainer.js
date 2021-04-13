@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import * as commitAPI from '../api/CommitAPI';
 import CommitList from '../components/CommitList';
+import CommitFilter from '../components/CommitFilter';
+import Pagination from '../components/Pagination';
+
 
 class CommitListContainer extends React.Component {
   componentDidMount() {
@@ -54,39 +57,18 @@ class CommitListContainer extends React.Component {
     const {commits, repos, pageSize, commitsCount, commitsPreviousUrl, commitsNextUrl, repoNameFilter, authorFilter} = this.props;
     return (
       <div>
-        {repoNameFilter == '' && authorFilter == '' ? (
-          <div></div>
-        ): (
-          <div className="card filter-component">
-            <div className="card-header row filter-header">
-              <div className="filter-info row col-10">
-                {repoNameFilter != '' && (
-                  <div className="col-6 filter-item"> 
-                    <span className="align-middle"> <strong>Repository: </strong> {repoNameFilter}</span>
-                  </div>
-                )}
-                {authorFilter != '' && (
-                  <div className="col-6 filter-item">
-                    <span className="align-middle"> <strong>Author: </strong> {authorFilter}</span>
-                  </div>
-                )}
-              </div>
-              <div className="col-2">
-                <button type="button" class="btn btn-danger" onClick={this.cleanFilter}>Remove Filters</button>
-              </div>
-            </div>
-          </div>
-        )}
-        <div>
-        </div>
-        <CommitList 
-          commits={commits} 
+        <CommitFilter repoNameFilter={repoNameFilter} authorFilter={authorFilter} cleanFilter={this.cleanFilter}/>
+        <Pagination
+          commitsLength={commits.length} 
           pageSize={pageSize} 
           commitsCount={commitsCount} 
           commitsPreviousUrl={commitsPreviousUrl} 
-          commitsNextUrl={commitsNextUrl}
+          commitsNextUrl={commitsNextUrl} 
           paginationNext={this.paginationNext}
           paginationPrevious={this.paginationPrevious}
+        />
+        <CommitList 
+          commits={commits} 
           filterCommitsBy={this.filterCommitsBy}
         />
       </div>
