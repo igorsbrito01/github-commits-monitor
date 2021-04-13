@@ -14,33 +14,6 @@ class Repository(models.Model):
     def __str__(self):
         return self.name
 
-    def populate_commits(self):
-        repo_commits = get_commits_from_repo(self.owner.username, self.name)
-        commits_sha = self.commit_set.values_list('sha', flat=True)
-
-        if repo_commits:
-            commits_to_create = []
-            for commit in repo_commits:
-                if commit['sha'] not in commits_sha:
-                    commits_to_create.append(
-                        Commit(message=commit['commit']['message'],
-                            sha=commit['sha'],
-                            author=commit['commit']['author']['name'],
-                            url=commit['commit']['url'],
-                            date=commit['commit']['committer']['date'],
-                            avatar=commit['author']['avatar_url'] if commit.get('author') else '',
-                            repository=self
-                        )
-                    )
-                
-            Commit.objects.bulk_create(commits_to_create)
-    
-    def update_commits(self):
-        last_date = timezone.now() - timedelta(days=30)
-
-        Commits.objects.filter(date__lt=last_date).delete()
-        self.populate_commits()
-
     class Meta:
         verbose_name_plural = 'Repositories'
 

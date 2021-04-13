@@ -1,20 +1,26 @@
-from datetime import timedelta
-
 from django.utils import timezone
 
-from .models import Repository
+from .github import get_commits_from_repo
+from .models import Repository, Commit
 from githubmonitor.celery import app
 
 
 @app.task
 def get_repository_commits(repository_id):
     repository = Repository.objects.get(id=repository_id)
-    repository.populate_commits()
+    repo_commits = get_commits_from_repo(repository.owner.username, repository.name)
 
-@app.task
-def update_repository_commits(repository_id):
-    last_allowed_date = timezone.now() - timedelta(days=30)
-
-    repository = Repository.objects.get(id=repository_id)
-    repository.commit_set.filter(date__lt=last_allowed_date).delete()
-    repository.populate_commits()
+    if repo_commits:
+        commits_to_create = []
+        for commit in repo_commits:
+            commits_to_create.append(Commit(
+                message=commit['commit']['message'],
+                sha=commit['sha'],
+                author=commit['commit']['author']['name'],
+                url=commit['commit']['url'],
+                date=commit['commit']['committer']['date'],
+                avatar=commit['author']['avatar_url'] if commit.get('author') else '',
+                repository=repository
+            ))
+            
+        Commit.objects.bulk_create(commits_to_create)

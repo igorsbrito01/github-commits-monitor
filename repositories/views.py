@@ -21,7 +21,8 @@ class CommitsList(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(repository__in=self.request.user.repositories.all())
+        return queryset.filter(repository__owner=self.request.user)
+
 
 class RepositoryAPIView(generics.ListCreateAPIView):
     queryset = Repository.objects.all()
