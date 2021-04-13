@@ -15,6 +15,7 @@ class Repository(models.Model):
         return self.name
 
     class Meta:
+        unique_together = ('name', 'owner')
         verbose_name_plural = 'Repositories'
 
 
